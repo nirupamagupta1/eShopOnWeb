@@ -6,10 +6,10 @@ on: [push, workflow_dispatch]
 #Environment variables https://docs.github.com/en/actions/learn-github-actions/environment-variables
 env:
   RESOURCE-GROUP: rg-az400-eshoponweb-NAME
-  LOCATION: westus
+  LOCATION: westeurope
   TEMPLATE-FILE: .azure/bicep/webapp.bicep
-  SUBSCRIPTION-ID: 109145ac-877f-46c0-8626-6e2e90a1b1fa
-  WEBAPP-NAME: az400-webapp-NAME
+  SUBSCRIPTION-ID: SUBSCRIPTION-ID
+  WEBAPP-NAME: az400-webapp-NIRU
 
 
 jobs:
@@ -70,7 +70,7 @@ jobs:
         
    #Login in your azure subscription using a service principal (credentials stored as GitHub Secret in repo)
     - name: Azure Login
-      uses: Azure login@v1
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
            
@@ -78,8 +78,8 @@ jobs:
     - name: deploy
       uses: azure/arm-deploy@v1
       with:
-        subscriptionId: ${{ SUBSCRIPTION-ID }}
-        resourceGroupName: ${{ RESOURCE-GROUP }}
+        subscriptionId: ${{ env.SUBSCRIPTION-ID }}
+        resourceGroupName: ${{ env.RESOURCE-GROUP }}
         template: bicep-template/webapp.bicep
         parameters: 'webAppName=${{ env.WEBAPP-NAME }} location=${{ env.LOCATION }}'
         failOnStdErr: false   
