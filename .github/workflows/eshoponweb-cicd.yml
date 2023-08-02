@@ -9,7 +9,7 @@ env:
   LOCATION: westus
   TEMPLATE-FILE: .azure/bicep/webapp.bicep
   SUBSCRIPTION-ID: 109145ac-877f-46c0-8626-6e2e90a1b1fa
-  WEBAPP-NAME: az400-webapp-NIRU
+  WEBAPP-NAME: az400-webapp-NAME
 
 
 jobs:
@@ -69,8 +69,8 @@ jobs:
         path: bicep-template
         
    #Login in your azure subscription using a service principal (credentials stored as GitHub Secret in repo)
-    - name: nirupama.gupta1
-      uses: nirupama.gupta1@v1
+    - name: Azure Login
+      uses: Azure login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
            
@@ -78,8 +78,8 @@ jobs:
     - name: deploy
       uses: azure/arm-deploy@v1
       with:
-        subscriptionId: ${{ env.109145ac-877f-46c0-8626-6e2e90a1b1fa }}
-        resourceGroupName: ${{ env.rg-az400-eshoponweb-NAME }}
+        subscriptionId: ${{ SUBSCRIPTION-ID }}
+        resourceGroupName: ${{ RESOURCE-GROUP }}
         template: bicep-template/webapp.bicep
         parameters: 'webAppName=${{ env.WEBAPP-NAME }} location=${{ env.LOCATION }}'
         failOnStdErr: false   
